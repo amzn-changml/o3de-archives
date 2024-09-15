@@ -61,8 +61,9 @@ jobs:
       - name: Get repo vars
         id: vars
         run: |
+          VERSION=$(echo "${{ inputs.branch }}" | tr '/' '-')
           echo ::set-output name=latest_log::$(git log --name-status HEAD^..HEAD)
-          echo ::set-output name=archive_file::${{ inputs.repository }}-${{ inputs.branch }}
+          echo ::set-output name=archive_file::${{ inputs.repository }}-$VERSION
           
       - name: Archive repo as compressed files
         run: |
