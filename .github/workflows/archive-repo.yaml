@@ -83,6 +83,8 @@ jobs:
 
       - name: Remove existing tag
         continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: gh release delete ${{ steps.vars.outputs.archive_file }}
         
       # Creates a release tag based on inputs
