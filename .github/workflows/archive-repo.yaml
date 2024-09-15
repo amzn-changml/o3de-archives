@@ -80,10 +80,13 @@ jobs:
             mv $ARCFILE.tar.gz temp-archive.tar.gz && split -b $MAXSIZE temp-archive.tar.gz $ARCFILE.tar.gz.part
           fi
           rm -f temp-archive.*
-          
+
+      - name: Remove existing tag
+        continue-on-error: true
+        run: gh release delete ${{ steps.vars.outputs.archive_file }}
+        
       # Creates a release tag based on inputs
       - name: Create Release
-        id: create_release
         uses: ncipollo/release-action@v1.14.0
         with:
           replacesArtifacts: true
