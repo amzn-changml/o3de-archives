@@ -85,7 +85,7 @@ jobs:
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release delete ${{ steps.vars.outputs.archive_file }}
+        run: gh release delete ${{ steps.vars.outputs.archive_file }} --cleanup-tag -y
         
       # Creates a release tag based on inputs
       - name: Create Release
@@ -93,6 +93,7 @@ jobs:
         with:
           replacesArtifacts: true
           removeArtifacts: true
+          allowUpdates: true
           name: ${{ steps.vars.outputs.archive_file }}
           tag: ${{ steps.vars.outputs.archive_file }}
           body: |
