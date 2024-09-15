@@ -38,6 +38,9 @@ on:
         
 run-name: Archiving ${{ inputs.repository }} for ${{ inputs.branch }}
 
+permissions:
+  contents: write
+
 jobs:
   Publish:
     name: Deploy
