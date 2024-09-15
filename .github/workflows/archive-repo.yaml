@@ -62,7 +62,7 @@ jobs:
         id: vars
         run: |
           echo ::set-output name=latest_log::$(git log --name-status HEAD^..HEAD)
-          echo ::set-output name=archive_file::${{ inputs.repository }}-${{ inputs.release_tag }}
+          echo ::set-output name=archive_file::${{ inputs.repository }}-${{ inputs.branch }}
           
       - name: Archive repo as compressed files
         run: |
@@ -85,6 +85,7 @@ jobs:
           replacesArtifacts: true
           removeArtifacts: true
           name: ${{ steps.vars.outputs.archive_file }}
+          tag: ${{ steps.vars.outputs.archive_file }}
           body: |
             ${{ steps.vars.outputs.latest_log }}
           artifacts: ${{ steps.vars.outputs.archive_file }}.tar*
