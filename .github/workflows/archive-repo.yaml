@@ -88,5 +88,3 @@ jobs:
           body: |
             ${{ steps.vars.outputs.latest_log }}
           artifacts: ${{ steps.vars.outputs.archive_file }}.tar*
-          
-          artifacts: "${{ steps.vars.outputs.archive_file }}.*"
