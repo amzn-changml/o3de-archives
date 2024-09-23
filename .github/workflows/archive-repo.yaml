@@ -51,15 +51,9 @@ jobs:
           ARCFILE=${{ steps.vars.outputs.archive_file }}
           if [ $(stat -c '%s' $ARCFILE.tar.gz) -ge $MAXSIZE ]; then
             mv $ARCFILE.tar.gz temp-archive.tar.gz && split -b $MAXSIZE temp-archive.tar.gz $ARCFILE.tar.gz.part
+            rm -f temp-archive.*
           fi
-          rm -f temp-archive.*
-
-      - name: Remove existing tag
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh release delete ${{ steps.vars.outputs.archive_file }} --cleanup-tag -y
-        
+          
       # Creates a release tag based on inputs
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
