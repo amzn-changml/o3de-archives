@@ -6,53 +6,26 @@ name: Archive repos
 on:
   # Allows you to run this workflow manually from the Actions tag
   workflow_dispatch:
-    inputs:
-      owner:
-        description: 'The org owner'
-        required: true
-        type: choice
-        default: o3de
-        options:
-          - o3de
-      repository:
-        description: 'The repo to target for publishing'
-        required: true
-        type: choice
-        default: o3de
-        options:
-          - o3de
-          - o3de-atom-sampleviewer
-          - o3de-multiplayersample
-          - o3de-multiplayersample-assets
-          - o3de-netsoaktest
-          - o3de-extras
-      branch:
-        description: 'The branch to publish'
-        required: true
-        type: choice
-        default: stabilization/2409
-        options:
-          - main
-          - development
-          - stabilization/2409
-        
-run-name: Archiving ${{ inputs.repository }} for ${{ inputs.branch }}
 
 permissions:
   contents: write
 
 jobs:
   Publish:
-    name: Deploy
+    name: Publish ${{ matrix.repository }} for ${{ matrix.branch }}
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }} # Check environment against branch
+    strategy:
+      matrix:
+        owner: [o3de]
+        repository: [o3de, o3de-extras]
+        branch: [development, stabilization/2409]
     
     steps:
       # Checks-out the repository under $GITHUB_WORKSPACE, so the job can access it
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          repository: ${{ inputs.owner }}/${{ inputs.repository }}
+          repository: ${{ matrix.owner }}/${{ matrix.repository }}
           ref: ${{ inputs.branch }}
           fetch-depth: 0
       
@@ -64,9 +37,9 @@ jobs:
       - name: Get repo vars
         id: vars
         run: |
-          VERSION=$(echo "${{ inputs.branch }}" | tr '/' '-')
+          VERSION=$(echo "${{ matrix.branch }}" | tr '/' '-')
           echo ::set-output name=latest_log::$(git log --pretty=short HEAD^..HEAD)
-          echo ::set-output name=archive_file::${{ inputs.repository }}-$VERSION
+          echo ::set-output name=archive_file::${{ matrix.repository }}-$VERSION
           
       - name: Archive repo as compressed files
         run: |
