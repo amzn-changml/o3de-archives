@@ -38,8 +38,8 @@ jobs:
         id: vars
         run: |
           VERSION=$(echo "${{ matrix.branch }}" | tr '/' '-')
-          echo "{latest_log}=$(git log --pretty=short HEAD^..HEAD)" >> $GITHUB_OUTPUT
-          echo "{archive_file}=${{ matrix.repository }}-$VERSION" >> $GITHUB_OUTPUT
+          echo "{latest_log}={$(git log --pretty=short HEAD^..HEAD)}" >> $GITHUB_OUTPUT
+          echo "{archive_file}={${{ matrix.repository }}-$VERSION}" >> $GITHUB_OUTPUT
           
       - name: Archive repo as compressed files
         run: |
